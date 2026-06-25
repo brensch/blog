@@ -1,6 +1,6 @@
 ---
-layout: post
 title: "Hello, world"
+date: 2026-06-25
 ---
 
 Every site needs a first post, so here's mine.

@@ -68,7 +68,7 @@ body {
 }
 
 /* Section labels */
-h2.section, .post-list h2 {
+.post-list h2 {
   font-size: .78rem;
   text-transform: uppercase;
   letter-spacing: .16em;

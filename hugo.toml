@@ -1,0 +1,14 @@
+baseURL = "https://brensch.com/"
+languageCode = "en-us"
+title = "Brendan Schlosser"
+enableRobotsTXT = true
+
+[params]
+  description = "Notes on games, homelabs, and software that occasionally works."
+  author = "Brendan Schlosser"
+
+[permalinks]
+  posts = "/:year/:month/:slug/"
+
+[markup.goldmark.renderer]
+  unsafe = true

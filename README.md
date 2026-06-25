@@ -1,30 +1,30 @@
 # blog
 
-Source for [brensch.com](https://brensch.com) — a minimal, theme-less Jekyll blog.
+Source for [brensch.com](https://brensch.com) — a minimal, theme-less Hugo blog.
 
 ## Develop
 
 ```sh
-docker run --rm -it -v "$PWD:/srv/jekyll" -p 4000:4000 jekyll/jekyll:4 jekyll serve
+docker run --rm -it -v "$PWD:/src" -p 1313:1313 hugomods/hugo:latest \
+  hugo server --bind 0.0.0.0 -D
 ```
 
 ## Build
 
 ```sh
-docker run --rm -v "$PWD:/srv/jekyll" jekyll/jekyll:4 jekyll build
+docker run --rm -v "$PWD:/src" hugomods/hugo:latest hugo --minify
 ```
 
-Output goes to `_site/`, which Caddy serves on the homelab box.
+Output goes to `public/`, which Caddy serves on the homelab box.
 
 ## Add a post
 
-Drop a file in `_posts/` named `YYYY-MM-DD-title.md` with front matter:
-
-```yaml
+```sh
+# create content/posts/my-post.md with front matter:
 ---
-layout: post
 title: "Your title"
+date: 2026-06-25
 ---
 ```
 
-Then rebuild.
+Then rebuild and the box will pick it up on the next pull + build.
