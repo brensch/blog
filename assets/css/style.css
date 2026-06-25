@@ -21,7 +21,29 @@
   --accent: #9a5b34;
   --bg: #fbfaf6;
   --rule: #e7e2d8;
+  --code-bg: #f0ece4;
   --maxw: 40rem;
+}
+
+/* Dark palette — follows the system preference, unless the visitor has
+   explicitly chosen a theme via the header toggle. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #ece6da;
+    --muted: #9b9384;
+    --accent: #d9a066;
+    --bg: #16140f;
+    --rule: #2e2a22;
+    --code-bg: #232019;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #ece6da;
+  --muted: #9b9384;
+  --accent: #d9a066;
+  --bg: #16140f;
+  --rule: #2e2a22;
+  --code-bg: #232019;
 }
 
 * { box-sizing: border-box; }
@@ -37,6 +59,7 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  transition: background-color .25s ease, color .25s ease;
 }
 
 .content, .site-header, .site-footer {
@@ -68,15 +91,32 @@ body {
 }
 .site-nav a:hover { color: var(--accent); }
 
+.theme-toggle {
+  margin-left: 1.25rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  line-height: 0;
+}
+.theme-toggle:hover { color: var(--accent); }
+.theme-toggle svg { width: 1.05rem; height: 1.05rem; display: block; }
+.theme-toggle .icon-sun { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+}
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+:root[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+
 /* Intro */
 .intro { padding: 1.5rem 0 1rem; }
-.intro h1 {
-  font-size: 2.5rem;
-  font-weight: 400;
-  line-height: 1.08;
-  letter-spacing: -.01em;
-  margin: 0 0 .85rem;
-}
 .lede {
   font-size: 1.2rem;
   color: var(--muted);
@@ -161,12 +201,12 @@ blockquote {
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: .85em;
-  background: #f0ece4;
+  background: var(--code-bg);
   padding: .12em .38em;
   border-radius: 3px;
 }
 pre {
-  background: #f0ece4;
+  background: var(--code-bg);
   padding: 1rem 1.1rem;
   border-radius: 6px;
   overflow: auto;
@@ -189,6 +229,5 @@ hr { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
 
 @media (max-width: 480px) {
   html { font-size: 17px; }
-  .intro h1 { font-size: 2rem; }
   .site-header { padding-top: 2rem; }
 }
