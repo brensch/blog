@@ -1,6 +1,7 @@
 ---
 title: "Placeholder, lovingly automated"
 date: 2026-06-25
+image: /img/hello-world.svg
 ---
 
 Full disclosure: an AI wrote this bit.

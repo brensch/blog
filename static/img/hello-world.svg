@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A stylised warm sunrise over soft rolling hills.">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf4ea"/>
+      <stop offset="0.55" stop-color="#f6e6d4"/>
+      <stop offset="1" stop-color="#f0dac3"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f7dcbd"/>
+      <stop offset="0.65" stop-color="#edc29c" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#edc29c" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="600" fill="url(#sky)"/>
+
+  <!-- sun -->
+  <circle cx="600" cy="330" r="200" fill="url(#glow)"/>
+  <circle cx="600" cy="330" r="80" fill="#e9a86d" opacity="0.6"/>
+
+  <!-- layered hills -->
+  <path d="M0,468 C200,428 380,470 560,452 C760,432 980,480 1200,448 L1200,600 L0,600 Z" fill="#e4c4a4"/>
+  <path d="M0,512 C220,484 430,522 640,506 C840,490 1020,526 1200,506 L1200,600 L0,600 Z" fill="#cfa07a"/>
+  <path d="M0,556 C260,538 470,568 700,556 C900,546 1050,568 1200,554 L1200,600 L0,600 Z" fill="#ad7d55"/>
+
+  <!-- subtle film grain -->
+  <rect width="1200" height="600" filter="url(#grain)" opacity="0.06"/>
+</svg>
