@@ -118,7 +118,7 @@ body {
 /* Project grid */
 .projects {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
   gap: .75rem;
   margin: 1.5rem 0 2.75rem;
 }
