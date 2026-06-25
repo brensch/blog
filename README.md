@@ -12,10 +12,17 @@ docker run --rm -it -v "$PWD:/src" -p 1313:1313 hugomods/hugo:latest \
 ## Build
 
 ```sh
-docker run --rm -v "$PWD:/src" hugomods/hugo:latest hugo --minify
+docker run --rm -v "$PWD:/src" hugomods/hugo:latest hugo --minify --cleanDestinationDir
 ```
 
 Output goes to `public/`, which Caddy serves on the homelab box.
+`--cleanDestinationDir` prunes stale files in place — don't `rm -rf public`,
+that detaches Caddy's bind mount and needs a `docker restart caddy`.
+
+## Per-post image
+
+Add `image: /img/<name>` to a post's front matter and drop the file in
+`static/img/`. It renders as a cover at the top of the post.
 
 ## Add a post
 
