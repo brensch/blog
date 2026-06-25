@@ -1,0 +1,23 @@
+---
+layout: default
+---
+<section class="intro">
+  <h1>Brendan Schlosser</h1>
+  <p class="lede">I make small games, tinker with homelabs, and write software that occasionally works. This is where I write some of it down.</p>
+</section>
+
+<section class="post-list">
+  <h2>Writing</h2>
+  {% if site.posts.size > 0 %}
+  <ul>
+    {% for post in site.posts %}
+    <li>
+      <a href="{{ post.url }}">{{ post.title }}</a>
+      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %Y" }}</time>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty">Nothing here yet. Soon, maybe.</p>
+  {% endif %}
+</section>
