@@ -1,6 +1,7 @@
 ---
 title: "Placeholder, lovingly automated"
 date: 2026-06-25
+slug: hello-world
 image: /img/hello-world.svg
 ---
 
