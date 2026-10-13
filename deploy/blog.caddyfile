@@ -1,0 +1,16 @@
+# brensch.com (installed by the blog's deploy/setup-vm.sh into /etc/caddy/Caddyfile.d/).
+brensch.com {
+	root * /opt/blog/site
+	file_server
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		Referrer-Policy no-referrer
+		X-Content-Type-Options nosniff
+		-Server
+	}
+}
+
+www.brensch.com {
+	redir https://brensch.com{uri} permanent
+}
