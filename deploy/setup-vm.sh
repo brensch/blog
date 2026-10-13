@@ -8,5 +8,6 @@ install -d -o opc -g opc -m 755 /opt/blog/site
 install -d -m 755 /etc/caddy/Caddyfile.d
 install -m 644 /tmp/blog.caddyfile /etc/caddy/Caddyfile.d/blog.caddyfile
 rm -f /tmp/blog.caddyfile
-caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile >/dev/null && systemctl reload caddy
+out=$(caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile 2>&1) || { echo "$out"; exit 1; }
+systemctl reload caddy
 echo "blog set up; run make deploy"

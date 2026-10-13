@@ -3,3 +3,6 @@ resources/_gen/
 .hugo_build.lock
 deploy/out/
 deploy/src/
+# Left over from the old Jekyll build (the site is Hugo now)
+_site/
+Gemfile.lock
