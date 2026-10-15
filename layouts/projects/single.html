@@ -4,9 +4,12 @@
   {{ with .Params.link }}
   <a class="post-link" href="{{ . }}" target="_blank" rel="noopener">{{ strings.TrimSuffix "/" (strings.TrimPrefix "https://" .) }} &rarr;</a>
   {{ end }}
-  {{ with .Params.image }}
+  {{ with .Params.demo }}
+  {{ $size := $.Params.demo_size }}
+  <img class="post-cover{{ if gt (index $size 1) (index $size 0) }} tall{{ end }}" src="{{ . }}" width="{{ index $size 0 }}" height="{{ index $size 1 }}" alt="{{ $.Title }} in use">
+  {{ else }}{{ with .Params.image }}
   <img class="post-cover" src="{{ . }}" width="600" height="600" alt="">
-  {{ end }}
+  {{ end }}{{ end }}
   <div class="post-body">
     {{ .Content }}
   </div>

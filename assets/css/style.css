@@ -167,13 +167,18 @@ body {
 .post-cover {
   display: block;
   width: 100%;
-  max-width: 16rem;
-  aspect-ratio: 1;
-  object-fit: cover;
-  object-position: top center;
-  border-radius: 8px;
+  height: auto;
+  border-radius: 10px;
   border: 1px solid var(--rule);
-  margin: 1rem 0 2rem;
+  margin: 1rem 0 2.25rem;
+}
+/* Phone-shaped clips: as tall as the screen allows, not as wide as the column. */
+.post-cover.tall {
+  width: auto;
+  max-width: 100%;
+  max-height: min(80vh, 42rem);
+  margin-left: auto;
+  margin-right: auto;
 }
 .post-title {
   font-size: 2.1rem;
