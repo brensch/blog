@@ -1,0 +1,15 @@
+{{ define "main" }}
+<article class="post">
+  <h1 class="post-title">{{ .Title }}</h1>
+  {{ with .Params.link }}
+  <a class="post-link" href="{{ . }}" target="_blank" rel="noopener">{{ strings.TrimSuffix "/" (strings.TrimPrefix "https://" .) }} &rarr;</a>
+  {{ end }}
+  {{ with .Params.image }}
+  <img class="post-cover" src="{{ . }}" width="600" height="600" alt="">
+  {{ end }}
+  <div class="post-body">
+    {{ .Content }}
+  </div>
+</article>
+<p class="back"><a href="/">&larr; Back</a></p>
+{{ end }}

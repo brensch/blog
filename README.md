@@ -1,6 +1,6 @@
 # blog
 
-Source for [brensch.com](https://brensch.com) — a minimal, theme-less Hugo blog.
+Source for [brensch.com](https://brensch.com) — a minimal, theme-less Hugo site with a page per project.
 
 ## Develop
 

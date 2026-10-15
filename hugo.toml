@@ -2,13 +2,11 @@ baseURL = "https://brensch.com/"
 languageCode = "en-us"
 title = "Brendan Schlosser"
 enableRobotsTXT = true
+disableKinds = ["section", "taxonomy", "term", "rss"]
 
 [params]
-  description = "Notes on games, homelabs, and software that occasionally works."
+  description = "Silly things on the internet, by brendan."
   author = "Brendan Schlosser"
-
-[permalinks]
-  posts = "/:year/:month/:slug/"
 
 [markup.goldmark.renderer]
   unsafe = true
