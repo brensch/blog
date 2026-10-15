@@ -10,7 +10,9 @@
 //   node snek.mjs            # → out/snek/{frames,manifest.json}
 import { startRecording, tap, typeSlowly, sleep } from './lib/record.mjs';
 
-const URL = 'https://snek.brensch.com/';
+// SNEK_URL=http://localhost:8090/ films a fresh local server (dev mode in
+// snek-server/net.rs): an empty game list and no traffic to the live one.
+const URL = process.env.SNEK_URL || 'https://snek.brensch.com/';
 const NAME = 'brendan';
 const COLOUR_INDEX = 14; // hot pink — clear of the bots' blues and purples
 const BOTS = ['🐲 hard'];
