@@ -54,7 +54,7 @@ for _ in $(seq 60); do grep -q "Server listening" "$B/backend.log" && break; sle
 # Drive the app; start filming when the scenario says it is set up.
 LOG="$OUT/drive.log"
 : >"$LOG"
-(cd "$WT/app" && "$FLUTTER" drive --driver test_driver/integration_test.dart \
+(cd "$WT/app" && "$FLUTTER" drive --profile --driver test_driver/integration_test.dart \
 	--target integration_test/promo_video_test.dart -d $DEV >"$LOG" 2>&1) &
 DRIVE=$!
 until grep -q 'PROMO|texts' "$LOG" || ! kill -0 $DRIVE 2>/dev/null; do sleep 0.2; done
@@ -76,4 +76,4 @@ A=$(awk '$1=="start"{print $2}' "$OUT/beats.txt")
 Z=$(awk '$1=="end"{print $2}' "$OUT/beats.txt")
 "$HERE/.venv/bin/python" "$HERE/lib/encode.py" schlift --video "$OUT/raw.mp4" \
 	--crop 0:118:1080:2218 --trim "$A:$Z" --speed "$A:$Z:1.3" \
-	--fps 15 --width 0 --quality 80 --encoder pillow
+	--fps 30 --width 720 --encoder video

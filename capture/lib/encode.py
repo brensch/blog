@@ -114,7 +114,7 @@ def squash_holds(paths, fps, max_hold, times=None, holds=()):
 
     for i, p in enumerate(paths):
         same = prev is not None and (
-            p == prev or ImageStat.Stat(ImageChops.difference(small(p), small(prev))).mean[0] < 0.6
+            p == prev or ImageStat.Stat(ImageChops.difference(small(p), small(prev))).mean[0] < 0.6 * 15 / fps
         )
         run = run + 1 if same else 0
         if run == 1 and times is not None:
@@ -151,10 +151,13 @@ def main():
     ap.add_argument("--out", type=Path)
     ap.add_argument(
         "--encoder",
-        choices=["ffmpeg", "pillow"],
+        choices=["ffmpeg", "pillow", "video"],
         default="ffmpeg",
-        help="pillow = libwebp's own anim encoder: no ghosting from earlier frames on lossy diffs",
+        help="pillow = libwebp's own anim encoder: no ghosting from earlier frames on lossy diffs; "
+        "video = <name>.av1.mp4 + <name>.h264.mp4 + <name>.poster.webp for a <video> tag",
     )
+    ap.add_argument("--av1-crf", type=int, default=34)
+    ap.add_argument("--h264-crf", type=int, default=24)
     args = ap.parse_args()
 
     frames = load_video(args.video, 30) if args.video else load_manifest(args.name)
@@ -180,6 +183,10 @@ def main():
             return im.crop((0, 0, im.width // 2 * 2, im.height // 2 * 2))
         h = round(im.height * args.width / im.width / 2) * 2
         return im.resize((args.width, h), Image.LANCZOS)
+
+    if args.encoder == "video":
+        encode_video(args, paths, prep)
+        return
 
     imgs = [prep(p) for p in paths]
     n = int(args.loop_fade * args.fps)
@@ -235,6 +242,66 @@ def main():
     for i, im in enumerate(picks):
         sheet.paste(im.resize((tw, th)), ((i % cols) * tw, (i // cols) * th))
     sheet.save(out.with_suffix(".sheet.jpg"), quality=85)
+
+
+def encode_video(args, paths, prep):
+    """Stream frames into AV1 and H.264 encoders at once, never holding the
+    whole clip in memory. Both get +faststart so playback starts before the
+    download finishes; the poster is the first frame, shown while it loads."""
+    cache = {}
+
+    def frame(p):
+        if p not in cache:
+            if len(cache) > 64:
+                cache.pop(next(iter(cache)))
+            cache[p] = prep(p)
+        return cache[p]
+
+    first = frame(paths[0])
+    w, h = first.size
+    n = int(args.loop_fade * args.fps)
+    fade_from = len(paths) - n if n and len(paths) > n * 2 else len(paths)
+    base = ROOT / "out" / args.name
+    rate = str(args.fps)
+    raw = ["-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{w}x{h}", "-r", rate, "-i", "-"]
+    common = ["-pix_fmt", "yuv420p", "-color_primaries", "bt709", "-color_trc", "bt709",
+              "-colorspace", "bt709", "-g", str(int(args.fps * 5)), "-an", "-movflags", "+faststart"]
+    jobs = {
+        "av1": [FFMPEG, "-v", "error", "-y", *raw, "-c:v", "libaom-av1", "-crf", str(args.av1_crf),
+                "-b:v", "0", "-cpu-used", "4", "-row-mt", "1", "-tiles", "2x2",
+                "-aq-mode", "1", *common, f"{base}.av1.mp4"],
+        "h264": [FFMPEG, "-v", "error", "-y", *raw, "-c:v", "libx264", "-crf", str(args.h264_crf),
+                 "-preset", "veryslow", "-tune", "animation", "-profile:v", "high",
+                 *common, f"{base}.h264.mp4"],
+    }
+    procs = {k: subprocess.Popen(cmd, stdin=subprocess.PIPE) for k, cmd in jobs.items()}
+    cols = 6
+    pick_at = {int(i * (len(paths) - 1) / (cols * 2 - 1)) for i in range(cols * 2)}
+    picks = []
+    for i, p in enumerate(paths):
+        im = frame(p)
+        if i >= fade_from:
+            im = Image.blend(im, first, (i - fade_from + 1) / (n + 1))
+        data = im.tobytes()
+        for proc in procs.values():
+            proc.stdin.write(data)
+        if i in pick_at:
+            picks.append(im.resize((200, round(h * 200 / w))))
+    for k, proc in procs.items():
+        proc.stdin.close()
+        if proc.wait():
+            sys.exit(f"ffmpeg {k} failed")
+    first.save(f"{base}.poster.webp", quality=80, method=6)
+    secs = len(paths) / args.fps
+    print(f"{args.name}: {w}x{h}, {secs:.1f}s @ {args.fps:g}fps")
+    for suffix in ("av1.mp4", "h264.mp4", "poster.webp"):
+        f = Path(f"{base}.{suffix}")
+        print(f"  {f.name}: {f.stat().st_size / 1e6:.2f} MB")
+    th = picks[0].height
+    sheet = Image.new("RGB", (200 * cols, th * 2), "white")
+    for i, im in enumerate(picks[: cols * 2]):
+        sheet.paste(im, ((i % cols) * 200, (i // cols) * th))
+    sheet.save(f"{base}.sheet.jpg", quality=85)
 
 
 if __name__ == "__main__":

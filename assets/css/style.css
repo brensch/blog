@@ -173,10 +173,11 @@ body {
   margin: 1rem 0 2.25rem;
 }
 /* Phone-shaped clips: as tall as the screen allows, not as wide as the column. */
+video.post-cover { background: var(--code-bg); object-fit: contain; }
 .post-cover.tall {
   width: auto;
   max-width: 100%;
-  max-height: min(80vh, 42rem);
+  height: min(80vh, 42rem);
   margin-left: auto;
   margin-right: auto;
 }

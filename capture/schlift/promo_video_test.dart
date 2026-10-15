@@ -194,7 +194,18 @@ void main() {
       await NotificationService.init(requestPermissions: false);
       await tester.pumpWidget(const SchliftApp());
       await s.settle();
-      await s.devLogin('demo-live');
+      // Dev login without the login screen's dev field, which only exists in
+      // debug builds; this runs in profile mode for smooth, release-like
+      // frames. Profile builds still talk to localhost (see main.dart).
+      await Provider.of<AuthProvider>(
+        tester.element(find.byType(MaterialApp).first),
+        listen: false,
+      ).testLogin('demo-live');
+      await s.settle(seconds: 4);
+      if (await s.waitForText('I understand', seconds: 4)) {
+        await s.tapText('I understand');
+        await s.settle(seconds: 2);
+      }
       if (await s.waitForText('SKIP', seconds: 6)) {
         await s.tapText('SKIP');
       }
@@ -214,11 +225,21 @@ void main() {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('tutorial_seen_v1.$userId', true);
       await feedHeartRate(tester, sinceMs: 0);
+
+      // Off camera, walk every screen the film visits once so Flutter has
+      // compiled their shaders and the first menu slide on camera is smooth.
+      binding.shouldPropagateDevicePointerEvents = true;
+      await p.menuTo('Progress');
+      await p.menuTo('History');
+      await p.menuTo('Workout');
+      await p.tapText('Heart', after: 0.6);
+      await p.tapText('Workout', after: 0.6);
+      await p.tapIcon(Icons.menu, after: 0.8);
+      await p.tapIcon(Icons.close, after: 1.0);
       await p.hold(1.5);
       debugPrint('PROMO|texts|${s.visibleTexts().join(' ¦ ')}');
       await p.hold(2.0); // the host starts screenrecord on the line above
 
-      binding.shouldPropagateDevicePointerEvents = true;
       beat('start');
       await p.hold(2.2);
 

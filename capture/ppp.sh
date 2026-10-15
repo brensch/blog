@@ -3,8 +3,8 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 node ppp.mjs
-.venv/bin/python lib/encode.py ppp --width 0 --fps 15 \
-	--max-hold 1.2 --quality 80 --encoder pillow \
+.venv/bin/python lib/encode.py ppp --width 1440 --fps 30 \
+	--max-hold 1.2 --quality 80 --encoder video \
 	--hold-after overview:2.8 \
 	--hold-after results:1.6 \
 	--hold-after restaurant:2.4 \

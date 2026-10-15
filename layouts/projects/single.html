@@ -6,7 +6,26 @@
   {{ end }}
   {{ with .Params.demo }}
   {{ $size := $.Params.demo_size }}
-  <img class="post-cover{{ if gt (index $size 1) (index $size 0) }} tall{{ end }}" src="{{ . }}" width="{{ index $size 0 }}" height="{{ index $size 1 }}" alt="{{ $.Title }} in use">
+  {{/* A muted, looping, inline video: AV1 where supported, H.264 otherwise.
+       Both are faststart MP4s, so they play while still downloading, and
+       the poster shows the first frame until then. */}}
+  <video class="post-cover{{ if gt (index $size 1) (index $size 0) }} tall{{ end }}"
+    autoplay muted loop playsinline preload="auto"
+    poster="/img/projects/{{ . }}-poster.webp"
+    width="{{ index $size 0 }}" height="{{ index $size 1 }}"
+    style="aspect-ratio: {{ index $size 0 }} / {{ index $size 1 }}"
+    aria-label="{{ $.Title }} in use">
+    <source src="/video/{{ . }}.av1.mp4" type='video/mp4; codecs="av01.0.08M.08"'>
+    <source src="/video/{{ . }}.h264.mp4" type="video/mp4">
+  </video>
+  <script>
+    // Respect reduced motion: no autoplay, but let them press play.
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('video.post-cover').forEach(function (v) {
+        v.removeAttribute('autoplay'); v.pause(); v.controls = true;
+      });
+    }
+  </script>
   {{ else }}{{ with .Params.image }}
   <img class="post-cover" src="{{ . }}" width="600" height="600" alt="">
   {{ end }}{{ end }}
