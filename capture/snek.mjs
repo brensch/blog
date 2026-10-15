@@ -28,6 +28,22 @@ const rec = await startRecording({
 const { page } = rec;
 page.on('pageerror', (e) => console.log('pageerror', e.message));
 
+// SNEK_DIST=<trunk dist dir>: film a frontend build that isn't deployed yet,
+// served in place of the live one; games still run on the live server.
+if (process.env.SNEK_DIST) {
+  const { default: fs } = await import('node:fs');
+  const { default: path } = await import('node:path');
+  const dist = process.env.SNEK_DIST;
+  const types = { '.html': 'text/html', '.js': 'text/javascript', '.wasm': 'application/wasm', '.css': 'text/css', '.woff2': 'font/woff2' };
+  await page.route(URL + '**', (route) => {
+    const u = new globalThis.URL(route.request().url());
+    if (u.pathname.startsWith('/api/')) return route.continue();
+    let f = path.join(dist, u.pathname === '/' ? 'index.html' : u.pathname);
+    if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) f = path.join(dist, 'index.html');
+    return route.fulfill({ body: fs.readFileSync(f), contentType: types[path.extname(f)] || 'application/octet-stream' });
+  });
+}
+
 await page.goto(URL, { waitUntil: 'networkidle' });
 await page.evaluate(() => document.fonts.ready);
 await page.getByPlaceholder('your name').waitFor();
