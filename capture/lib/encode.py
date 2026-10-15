@@ -175,6 +175,9 @@ def main():
         if args.crop:
             x, y, w, h = args.crop
             im = im.crop((x, y, x + w, y + h))
+        if not args.width or args.width >= im.width:
+            # Native resolution (rounded to even for the encoder).
+            return im.crop((0, 0, im.width // 2 * 2, im.height // 2 * 2))
         h = round(im.height * args.width / im.width / 2) * 2
         return im.resize((args.width, h), Image.LANCZOS)
 

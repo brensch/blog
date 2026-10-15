@@ -33,7 +33,13 @@ export async function startRecording({
   fs.rmSync(frameDir, { recursive: true, force: true });
   fs.mkdirSync(frameDir, { recursive: true });
 
-  const browser = await chromium.launch({ channel: 'chrome', ...launch });
+  // Emulating deviceScaleFactor alone still screencasts at 1x; forcing it on
+  // the browser too is what makes the frames come through at full density.
+  const browser = await chromium.launch({
+    channel: 'chrome',
+    ...launch,
+    args: [`--force-device-scale-factor=${deviceScaleFactor}`, ...(launch.args ?? [])],
+  });
   const context = await browser.newContext({
     viewport,
     deviceScaleFactor,
@@ -72,7 +78,7 @@ export async function startRecording({
     async begin() {
       await cdp.send('Page.startScreencast', {
         format: 'jpeg',
-        quality: 92,
+        quality: 95,
         maxWidth: viewport.width * deviceScaleFactor,
         maxHeight: viewport.height * deviceScaleFactor,
         everyNthFrame: 1,

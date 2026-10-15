@@ -4,7 +4,7 @@ weight: 3
 link: https://schniff.brensch.com
 image: /img/projects/schniff.webp
 demo: /img/projects/schniffer-demo.webp
-demo_size: [800, 640]
+demo_size: [1600, 1280]
 description: "A Discord bot for booking Yosemite campsites."
 ---
 

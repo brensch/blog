@@ -4,7 +4,7 @@ weight: 2
 link: https://snek.brensch.com/
 image: /img/projects/snek.webp
 demo: /img/projects/snek-demo.webp
-demo_size: [600, 1170]
+demo_size: [780, 1520]
 description: "Multiplayer competitive snake, with a battlesnake bot running in your browser."
 ---
 

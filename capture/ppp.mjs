@@ -1,4 +1,4 @@
-// ppp: plan San Francisco → Los Angeles, then filter the food at every
+// ppp: plan Mountain View → Los Angeles, then filter the food at every
 // supercharger stop down to sushi, browse the stops, and open one on the map.
 // Landscape 16:10, roughly the shape of the Tesla screen it is built for.
 import { startRecording, tap, typeSlowly, sleep } from './lib/record.mjs';
@@ -32,8 +32,8 @@ await rec.begin();
 await sleep(1200);
 
 // Where from, where to — through the autocomplete.
-await typeSlowly(page.getByPlaceholder('Current Location'), 'San Francisco');
-await tap(page, page.getByText('San Francisco, CA, USA', { exact: true }));
+await typeSlowly(page.getByPlaceholder('Current Location'), 'Mountain View');
+await tap(page, page.getByText('Mountain View, CA, USA', { exact: true }));
 await sleep(300);
 await typeSlowly(page.getByPlaceholder('Preferred Place of Passage'), 'Los Angeles');
 await tap(page, page.getByText('Los Angeles, CA, USA', { exact: true }));

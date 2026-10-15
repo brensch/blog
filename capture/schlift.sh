@@ -76,4 +76,4 @@ A=$(awk '$1=="start"{print $2}' "$OUT/beats.txt")
 Z=$(awk '$1=="end"{print $2}' "$OUT/beats.txt")
 "$HERE/.venv/bin/python" "$HERE/lib/encode.py" schlift --video "$OUT/raw.mp4" \
 	--crop 0:118:1080:2218 --trim "$A:$Z" --speed "$A:$Z:1.3" \
-	--fps 15 --width 540 --quality 78 --encoder pillow
+	--fps 15 --width 0 --quality 80 --encoder pillow

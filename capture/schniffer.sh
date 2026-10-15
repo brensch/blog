@@ -3,4 +3,4 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 node schniffer.mjs
-.venv/bin/python lib/encode.py schniffer --width 800 --max-hold 1.6 --quality 80 --encoder pillow
+.venv/bin/python lib/encode.py schniffer --width 0 --max-hold 1.6 --quality 80 --encoder pillow

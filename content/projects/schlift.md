@@ -4,7 +4,7 @@ weight: 1
 link: https://schlift.com/
 image: /img/projects/schlift.webp
 demo: /img/projects/schlift-demo.webp
-demo_size: [540, 1108]
+demo_size: [1080, 2218]
 description: "A free weightlifting app."
 ---
 

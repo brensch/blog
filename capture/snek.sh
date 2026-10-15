@@ -30,5 +30,5 @@ EOF
 
 .venv/bin/python lib/encode.py snek \
 	"${SPEEDS[@]}" \
-	--fps 15 --width 600 --max-hold 1.2 --hold-after over:5 --encoder pillow \
-	--quality 70 --loop-fade 0.6 "$@"
+	--fps 15 --width 0 --max-hold 1.2 --hold-after over:5 --encoder pillow \
+	--quality 80 --loop-fade 0.6 "$@"
